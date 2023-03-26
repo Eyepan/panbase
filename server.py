@@ -12,7 +12,7 @@ class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
     @override
     def log_message(self, format, *args):
         message = format % args
-        logger.info(message)
+        logger.info(message.replace('"', ''))
 
 
 def serve_admin():
