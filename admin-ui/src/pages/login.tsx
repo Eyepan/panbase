@@ -21,7 +21,7 @@ function Login() {
 		bodyFormData.append("password", password);
 		axios({
 			method: "post",
-			url: apiUrl + "/admin/login",
+			url: apiUrl + "api/admin/login",
 			data: bodyFormData,
 			headers: { "Content-Type": "multipart/form-data" },
 		})
@@ -29,7 +29,7 @@ function Login() {
 				setError(false);
 				console.log(response.data.access_token);
 				setAuthToken(response.data.access_token);
-				navigate("/home");
+				navigate("/");
 			})
 			.catch(function (response) {
 				setError(true);
