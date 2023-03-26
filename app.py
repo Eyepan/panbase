@@ -4,8 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from config import ADMIN_PORT, API_PORT
 from logger import logger
-from routes.admin import router as admin_router, login_admin
-
+from routes.admin import router as admin_router
+from routes.collections import router as collections_router
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
@@ -17,6 +17,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.include_router(admin_router)
+app.include_router(collections_router)
 
 
 @app.on_event("startup")

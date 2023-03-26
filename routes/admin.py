@@ -3,7 +3,7 @@ from fastapi import Depends, HTTPException, APIRouter
 from fastapi.security import OAuth2PasswordRequestForm
 from config import JWT_SECRET
 import jwt
-from auth import oauth2_scheme
+from auth import oauth2_scheme, get_token_owner_type
 
 router = APIRouter(prefix="", tags=["admin"])
 
@@ -37,7 +37,7 @@ def register_admin(username: str, password: str):
 
 
 @router.get("/api/me")
-async def who_am_i(token: str = Depends(oauth2_scheme)):
+async def who_am_i(token=Depends(oauth2_scheme)):
     input = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
     result = db.run_query(
         "SELECT * FROM admins WHERE id = :id", id=input['id'])
@@ -49,3 +49,10 @@ async def who_am_i(token: str = Depends(oauth2_scheme)):
 
         return {"username": result[0][1]}
     raise HTTPException(status_code=400, detail="Invalid token")
+
+
+@router.get("/verify")
+async def verify(token=Depends(oauth2_scheme)):
+    if token:
+        return get_token_owner_type(token) == "ADMIN"
+    return False
