@@ -27,13 +27,10 @@ class Database:
         return conn
 
     def _get_connection(self):
-        logger.debug("POOL SIZE: %s", self._connection_pool.qsize())
         try:
             conn = self._connection_pool.get_nowait()
         except queue.Empty:
             conn = self._create_connection()
-            logger.debug("New connection made")
-
         return conn
 
     def _release_connection(self, conn):
@@ -42,13 +39,11 @@ class Database:
         except queue.Full:
             conn.close()
 
-    
     def encrypt(self, password):
         return argon2.PasswordHasher().hash(password)
 
     def verify_password(self, password, hashed):
         return argon2.PasswordHasher().verify(hashed, password)
-
 
     def run_query(self, query, **kwargs):
         try:
