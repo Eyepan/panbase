@@ -11,8 +11,8 @@ const apiUrl = import.meta.env.VITE_API_URL;
 function Login() {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
+	const [error, setError] = useState("");
 	const navigate = useNavigate();
-	const [error, setError] = useState(false);
 
 	function onSubmit(event: { preventDefault: () => void }) {
 		event.preventDefault();
@@ -26,20 +26,20 @@ function Login() {
 			headers: { "Content-Type": "multipart/form-data" },
 		})
 			.then(function (response) {
-				setError(false);
+				setError("");
 				console.log(response.data.access_token);
 				setAuthToken(response.data.access_token);
 				navigate("/");
 			})
-			.catch(function (response) {
-				setError(true);
+			.catch(function (error) {
+				setError(error.response.data.detail);
 			});
 	}
 
 	return (
-		<div className="h-screen flex items-center justify-center ">
-			<div className="flex flex-row w-3/4 lg:w-1/2 h-1/2 border border-black">
-				<div className="bg-black text-white w-1/2 flex items-center justify-center text-4xl">
+		<div className="h-screen flex items-center justify-center rounded-none">
+			<div className="flex flex-row w-3/4 lg:w-1/2 h-1/2 base">
+				<div className="w-1/2 flex items-center justify-center text-4xl base-inverted">
 					PanBase
 				</div>
 				<form
@@ -49,28 +49,24 @@ function Login() {
 					<h1 className="text-3xl">Admin</h1>
 					<input
 						type="text"
-						className=" p-4 border-2 border-black w-5/6"
+						className=" p-4 w-5/6"
 						placeholder="Username"
 						onChange={(e) => {
 							setUsername(e.target.value);
 						}}
+						required
 					/>
 					<input
 						type="password"
-						className=" p-4 border-2 border-black w-5/6"
+						className=" p-4 w-5/6"
 						placeholder="Password"
 						onChange={(e) => {
 							setPassword(e.target.value);
 						}}
+						required
 					/>
-					{error && (
-						<div className="text-red-500">
-							Invalid username or password
-						</div>
-					)}
-					<button className="bg-black w-5/6 text-white p-4">
-						Submit
-					</button>
+					{error && <div className="text-red-500">{error}</div>}
+					<button className=" w-5/6 p-4 ">Submit</button>
 				</form>
 			</div>
 		</div>

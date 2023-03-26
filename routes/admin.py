@@ -4,7 +4,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from config import JWT_SECRET
 import jwt
 from auth import oauth2_scheme, get_token_owner_type
-
+from logger import logger
 router = APIRouter(prefix="", tags=["admin"])
 
 
@@ -17,7 +17,10 @@ def login_admin(form_data: OAuth2PasswordRequestForm = Depends()):
         "SELECT * FROM admins WHERE username = :username", username=username)
     if not result:
         raise HTTPException(status_code=400, detail="Invalid username")
-    if not db.verify_password(password, result[0][2]):
+    try:
+        db.verify_password(password, result[0][2])
+    except Exception as e:
+        logger.error(str(e))
         raise HTTPException(status_code=400, detail="Invalid password")
     token = jwt.encode({"id": result[0][0]}, JWT_SECRET, algorithm="HS256")
     return {"access_token": token, "token_type": "bearer"}

@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+	* {
+		@apply transition-all duration-75 ease-in-out;
+	}
+	.base {
+		@apply bg-white text-black outline;
+	}
+	.base-inverted {
+		@apply bg-black text-white;
+	}
+	input {
+		@apply bg-white text-black hover:bg-neutral-300 focus:bg-neutral-300 outline;
+	}
+	button {
+		@apply bg-white text-black hover:bg-neutral-300 outline hover:rounded-3xl;
+	}
+}
