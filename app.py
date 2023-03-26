@@ -1,9 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+
 from config import ADMIN_PORT, API_PORT
 from logger import logger
-from database import db
+from routes.admin import router as admin_router, login_admin
 
 app = FastAPI()
 app.add_middleware(
@@ -15,6 +16,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.include_router(admin_router)
 
 
 @app.on_event("startup")
@@ -23,8 +25,3 @@ async def startup_event():
     print("\t\033[94mPANBASE\033[0m")
     print(f"\tREST API: http://localhost:{API_PORT}/api")
     print(f"\tADMIN DASHBOARD: http://localhost:{ADMIN_PORT}/")
-
-
-@app.get("/admins")
-async def get_admins():
-    return db.run_query("SELECT id, username FROM admins")

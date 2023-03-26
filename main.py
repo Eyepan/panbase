@@ -1,3 +1,4 @@
+import os
 import threading
 
 import uvicorn
@@ -12,6 +13,6 @@ server_thread = threading.Thread(target=serve_admin, daemon=True)
 if __name__ == "__main__":
     server_thread.start()
     logger.info(f"Admin server started on port {ADMIN_PORT}")
-    uvicorn.run("app:app" if RELOAD else app, host="0.0.0.0", port=API_PORT,
-                log_level=LOG_LEVEL.lower(), reload=RELOAD)
+    uvicorn.run("app:app" if RELOAD else app, host="0.0.0.0",
+                port=API_PORT, log_level=LOG_LEVEL.lower(), reload=RELOAD, reload_dirs=[os.getcwd()])
     logger.info(f"Admin server stopped on port {ADMIN_PORT}")
