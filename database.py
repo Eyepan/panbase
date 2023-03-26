@@ -10,9 +10,8 @@ from logger import logger
 class Database:
 
     def connection(self):
-        logger.info("Opening database connection to " +
-                    os.path.abspath("database.db") + "...")
-        conn = sqlite3.connect("database.db", isolation_level=None)
+        conn = sqlite3.connect(os.path.join(os.path.dirname(
+            __file__), 'database.db'), isolation_level=None)
         conn.execute("PRAGMA JOURNAL_MODE=WAL")
         return conn
 
