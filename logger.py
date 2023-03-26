@@ -9,14 +9,14 @@ ch.setLevel(LOG_LEVEL)
 
 formatter = colorlog.LevelFormatter(
     fmt={
-        "DEBUG": "%(log_color)sDBG:\t%(message)s (%(module)s:%(lineno)d)",
-        "INFO": "%(log_color)sINFO:\t%(message)s",
-        "WARNING": "%(log_color)sWRN:\t%(message)s (%(module)s:%(lineno)d)",
-        "ERROR": "%(log_color)sERR:\t%(message)s (%(module)s:%(lineno)d)",
-        "CRITICAL": "%(log_color)sCRT:\t%(message)s (%(module)s:%(lineno)d)",
+        "DEBUG": "%(log_color)sDBG:\t%(asctime)s\t%(message)s (%(module)s:%(lineno)d)",
+        "INFO": "%(log_color)sINFO:\t%(asctime)s\t%(message)s",
+        "WARNING": "%(log_color)sWRN:\t%(asctime)s\t%(message)s (%(module)s:%(lineno)d)",
+        "ERROR": "%(log_color)sERR:\t%(asctime)s\t%(message)s (%(module)s:%(lineno)d)",
+        "CRITICAL": "%(log_color)sCRT:\t%(asctime)s\t%(message)s (%(module)s:%(lineno)d)",
     },
     log_colors={
-        'DEBUG': 'white',
+        'DEBUG': 'blue',
         'INFO': 'green',
         'WARNING': 'yellow',
         'ERROR': 'red',

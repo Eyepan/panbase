@@ -1,5 +1,7 @@
 import { authToken, removeAuthToken, setAuthToken } from "../store/store";
 
+import axios from "axios";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Home() {
@@ -8,6 +10,23 @@ function Home() {
 		removeAuthToken();
 		navigate(0);
 	}
+
+	const apiUrl = import.meta.env.VITE_API_URL;
+	useEffect(() => {
+		const verifyToken = async () => {
+			try {
+				const response = await axios.get(apiUrl + "verify", {
+					headers: { Authorization: `Bearer ${authToken}` },
+				});
+				if (!response) {
+					navigate("/login");
+				}
+			} catch (error) {
+				console.log(error);
+			}
+		};
+		verifyToken();
+	}, []);
 
 	return (
 		<>
