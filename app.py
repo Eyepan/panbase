@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from config import ADMIN_PORT, API_PORT
 from logger import logger
+from database import db
 
 app = FastAPI()
 app.add_middleware(
@@ -22,3 +23,8 @@ async def startup_event():
     print("\t\033[94mPANBASE\033[0m")
     print(f"\tREST API: http://localhost:{API_PORT}/api")
     print(f"\tADMIN DASHBOARD: http://localhost:{ADMIN_PORT}/")
+
+
+@app.get("/admins")
+async def get_admins():
+    return db.run_query("SELECT id, username FROM admins")
