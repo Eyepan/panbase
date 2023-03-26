@@ -1,3 +1,4 @@
+import os
 import sqlite3
 
 import argon2
@@ -9,6 +10,8 @@ from logger import logger
 class Database:
 
     def connection(self):
+        logger.info("Opening database connection to " +
+                    os.path.abspath("database.db") + "...")
         conn = sqlite3.connect("database.db", isolation_level=None)
         conn.execute("PRAGMA JOURNAL_MODE=WAL")
         return conn

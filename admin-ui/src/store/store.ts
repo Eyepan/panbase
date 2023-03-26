@@ -15,4 +15,9 @@ function removeAuthToken() {
 	document.cookie = `authToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
 }
 
-export { authToken, setAuthToken, removeAuthToken };
+function getAuthHeaders() {
+	return {
+		headers: { Authorization: `Bearer ${authToken}` },
+	};
+}
+export { authToken, setAuthToken, removeAuthToken, getAuthHeaders };

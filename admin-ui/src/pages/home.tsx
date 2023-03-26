@@ -1,4 +1,9 @@
-import { authToken, removeAuthToken, setAuthToken } from "../store/store";
+import {
+	authToken,
+	getAuthHeaders,
+	removeAuthToken,
+	setAuthToken,
+} from "../store/store";
 
 import axios from "axios";
 import { useEffect } from "react";
@@ -15,9 +20,10 @@ function Home() {
 	useEffect(() => {
 		const verifyToken = async () => {
 			try {
-				const response = await axios.get(apiUrl + "verify", {
-					headers: { Authorization: `Bearer ${authToken}` },
-				});
+				const response = await axios.get(
+					apiUrl + "verify",
+					getAuthHeaders()
+				);
 				if (!response) {
 					navigate("/login");
 				}

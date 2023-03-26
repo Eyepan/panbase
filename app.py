@@ -1,3 +1,4 @@
+import threading
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -6,6 +7,7 @@ from config import ADMIN_PORT, API_PORT
 from logger import logger
 from routes.admin import router as admin_router
 from routes.collections import router as collections_router
+from server import serve_admin
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
@@ -26,3 +28,5 @@ async def startup_event():
     print("\t\033[94mPANBASE\033[0m")
     print(f"\tREST API: http://localhost:{API_PORT}/api")
     print(f"\tADMIN DASHBOARD: http://localhost:{ADMIN_PORT}/")
+    server_thread = threading.Thread(target=serve_admin, daemon=True)
+    server_thread.start()
