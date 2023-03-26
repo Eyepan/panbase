@@ -9,7 +9,7 @@ router = APIRouter(prefix="", tags=["admin"])
 
 
 @router.post("/token")
-@router.post("/admin/login")
+@router.post("/api/admin/login")
 def login_admin(form_data: OAuth2PasswordRequestForm = Depends()):
     username = form_data.username
     password = form_data.password
@@ -23,7 +23,7 @@ def login_admin(form_data: OAuth2PasswordRequestForm = Depends()):
     return {"access_token": token, "token_type": "bearer"}
 
 
-@router.post("/admin/register")
+@router.post("/api/admin/register")
 def register_admin(username: str, password: str):
     result = db.run_query(
         "SELECT * FROM admins WHERE username = :username", username=username)
@@ -36,7 +36,7 @@ def register_admin(username: str, password: str):
     return {"access_token": token, "token_type": "bearer"}
 
 
-@router.get("/me")
+@router.get("/api/me")
 async def who_am_i(token: str = Depends(oauth2_scheme)):
     input = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
     result = db.run_query(
