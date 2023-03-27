@@ -7,15 +7,21 @@
 		@apply transition-all duration-75 ease-in-out;
 	}
 	.base {
-		@apply bg-white text-black outline;
+		@apply bg-white text-black border border-black;
 	}
 	.base-inverted {
 		@apply bg-black text-white;
 	}
 	input {
-		@apply bg-white text-black hover:bg-neutral-300 focus:bg-neutral-300 outline;
+		@apply text-black bg-neutral-200 focus:bg-neutral-300 border border-black p-4;
 	}
 	button {
-		@apply bg-white text-black hover:bg-neutral-300 outline hover:rounded-3xl;
+		@apply border border-black p-4;
+	}
+	.light-button {
+		@apply text-black bg-white hover:bg-black hover:text-white;
+	}
+	.dark-button {
+		@apply text-white bg-black hover:bg-white hover:text-black;
 	}
 }

@@ -1,7 +1,6 @@
 import os
 import sqlite3
-
-import argon2
+import bcrypt
 from fastapi import HTTPException
 
 from logger import logger
@@ -33,10 +32,10 @@ class Database:
             conn.close()
 
     def encrypt(self, password):
-        return argon2.PasswordHasher().hash(password)
+        return bcrypt.hashpw(password.encode(), self.salt_value)
 
-    def verify_password(self, password, hashed):
-        return argon2.PasswordHasher().verify(hashed, password)
+    def verify_password(self, password: str, hashed):
+        return hashed == bcrypt.hashpw(password.encode(), self.salt_value)
 
     def __init__(self):
         self.run_query(
@@ -44,7 +43,13 @@ class Database:
         self.run_query(
             "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE, password TEXT)")
         self.run_query("CREATE TABLE IF NOT EXISTS salt (salt TEXT)")
-
+        result = self.run_query("SELECT * FROM salt")
+        if result == []:
+            self.salt_value = bcrypt.gensalt()
+            self.run_query("INSERT INTO salt (salt) VALUES (:salt)",
+                           salt=self.salt_value)
+        else:
+            self.salt_value = result[0][0]
         if self.run_query("SELECT * FROM admins") == []:
             self.run_query("INSERT INTO admins (username, password) VALUES (:username, :password)",
                            username="admin", password=self.encrypt("admin"))

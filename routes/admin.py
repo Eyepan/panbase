@@ -18,10 +18,7 @@ def login_admin(form_data: OAuth2PasswordRequestForm = Depends()):
         "SELECT * FROM admins WHERE username = :username", username=username)
     if not result:
         raise HTTPException(status_code=400, detail="Invalid username")
-    try:
-        db.verify_password(password, result[0][2])
-    except Exception as e:
-        logger.error(str(e))
+    if not db.verify_password(password, result[0][2]):
         raise HTTPException(status_code=400, detail="Invalid password")
     token = jwt.encode({"id": result[0][0]}, JWT_SECRET, algorithm="HS256")
     return {"access_token": token, "token_type": "bearer"}
