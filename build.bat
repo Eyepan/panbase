@@ -1,3 +1,5 @@
+del database.db
+python main.py --debug  --init
 python -m nuitka main.py ^
 --output-dir=dist ^
 --onefile ^
