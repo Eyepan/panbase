@@ -4,7 +4,7 @@
 
 @layer components {
 	* {
-		@apply transition-all duration-75 ease-in-out;
+		@apply transition-all duration-75 ease-in-out rounded-md;
 	}
 	.base {
 		@apply bg-white text-black border border-black;
@@ -13,7 +13,7 @@
 		@apply bg-black text-white;
 	}
 	input {
-		@apply text-black bg-neutral-200 focus:bg-neutral-300 border border-black p-4;
+		@apply text-black bg-neutral-100 hover:bg-neutral-200 focus:bg-neutral-300 border border-black p-4;
 	}
 	button {
 		@apply border border-black p-4;

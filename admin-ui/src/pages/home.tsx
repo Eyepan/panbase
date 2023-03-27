@@ -4,13 +4,25 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+interface Column {
+	name: string;
+	type: string;
+	notnull: boolean;
+	dflt_value: string | null;
+}
+
 function Home() {
 	const apiUrl = import.meta.env.VITE_API_URL;
 	const [showAddCollection, setShowAddCollection] = useState(false);
 	const [collections, setCollections] = useState<string[]>([]);
+	// TODO: Convert this to a state
+	let columns = [
+		{ name: "id", type: "INT", notnull: false, dflt_value: null },
+	];
 	const navigate = useNavigate();
 	const handleAddCollection = () => {
 		console.log("handle add collection");
+		console.log(columns);
 	};
 	const handleSignout = () => {
 		removeAuthToken();
@@ -48,8 +60,9 @@ function Home() {
 		<>
 			{showAddCollection && (
 				<div className="w-screen h-screen absolute flex items-center justify-center top-0 left-0 bg-black bg-opacity-50 z-30">
-					<div className="md:w-1/2 lg:w-1/3  bg-white z-50">
+					<div className="md:w-1/2 lg:w-1/3 bg-white z-50 ">
 						<form
+							onSubmit={(e) => e.preventDefault()}
 							action=""
 							className="flex flex-col justify-center h-full p-4 gap-2"
 						>
@@ -61,9 +74,50 @@ function Home() {
 									placeholder="My Collection"
 								/>
 							</div>
+							<label htmlFor="">Columns</label>
+							{columns.map((c) => (
+								<div className="flex gap-2">
+									<input
+										type="text"
+										className="w-full"
+										onChange={(e) =>
+											(c.name = e.target.value)
+										}
+										defaultValue={c.name}
+									/>
+									<select
+										name=""
+										id=""
+										onChange={(e) =>
+											(c.type = e.target.value)
+										}
+										defaultValue={c.type}
+										className="w-1/2 p-4 bg-white border border-black"
+									>
+										<option value="TEXT">TEXT</option>
+										<option value="INTEGER">INTEGER</option>
+										<option value="NUMERIC">NUMERIC</option>
+										<option value="REAL">REAL</option>
+										<option value="BLOB">BLOB</option>
+									</select>
+								</div>
+							))}
+							<button
+								onClick={() => {
+									columns.push({
+										name: "",
+										type: "TEXT",
+										notnull: false,
+										dflt_value: null,
+									});
+								}}
+								className="light-button"
+								type="button"
+							>
+								+
+							</button>
 							<span className="text-sm">
-								By default, the columns that are created are
-								ID(AUTOINCREMENT)
+								System Fields: <code>id</code>
 							</span>
 							<div className="flex gap-2">
 								<button
@@ -76,8 +130,8 @@ function Home() {
 									Cancel
 								</button>
 								<button
-									className="dark-button hover:bg-neutral-500 w-full"
-									type="reset"
+									className="dark-button hover:bg-neutral-500 w-full hover:text-white"
+									type="submit"
 									onClick={handleAddCollection}
 								>
 									Add
@@ -90,11 +144,13 @@ function Home() {
 			<div className="flex">
 				<div
 					id="SIDEBAR"
-					className="h-screen md:w-1/4 lg:w-1/6 flex relative flex-col"
+					className="h-screen md:w-1/4 lg:w-1/6 flex relative flex-col p-2"
 				>
 					<div className="p-4 text-center">Collections</div>
 					{collections.map((e) => (
-						<button className="p-4 my-2 light-button">{e}</button>
+						<button key={e} className="p-4 my-2 light-button">
+							{e}
+						</button>
 					))}
 					<button
 						className="p-4 my-2 light-button border-dashed"
@@ -105,7 +161,7 @@ function Home() {
 						ADD +
 					</button>
 					<button
-						className="absolute bottom-0 w-full dark-button"
+						className="absolute left-0 bottom-0 w-full dark-button rounded-l-none rounded-b-none"
 						onClick={handleSignout}
 					>
 						Signout
