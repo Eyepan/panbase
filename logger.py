@@ -24,7 +24,6 @@ formatter = colorlog.LevelFormatter(
     }
 )
 
-
 ch.setFormatter(formatter)
 
 logger.addHandler(ch)
