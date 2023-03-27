@@ -6,7 +6,7 @@ from auth import oauth2_scheme, get_token_owner_type
 router = APIRouter(prefix="/api/collections", tags=["collections"])
 
 Column = ['cid', 'name', 'type', 'notnull', 'dflt_value', 'pk']
-
+types = ['INTEGER', 'TEXT', 'NUMERIC', 'REAL', 'BLOB']
 # {
 # 	collection_name: "apple",
 # 	columns: [
