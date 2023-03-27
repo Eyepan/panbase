@@ -1,4 +1,4 @@
-from typing import Dict, List, Tuple
+from typing import Dict, List
 from pydantic import BaseModel
 from database import db
 from fastapi import Depends, HTTPException, APIRouter
