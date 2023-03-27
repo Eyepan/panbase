@@ -14,8 +14,7 @@ function Login() {
 	const [error, setError] = useState("");
 	const navigate = useNavigate();
 
-	function onSubmit(event: { preventDefault: () => void }) {
-		event.preventDefault();
+	function onSubmit() {
 		console.log("Auth token", authToken);
 		bodyFormData.append("username", username);
 		bodyFormData.append("password", password);
@@ -27,9 +26,8 @@ function Login() {
 		})
 			.then(function (response) {
 				setError("");
-				console.log(response.data.access_token);
 				setAuthToken(response.data.access_token);
-				navigate("/");
+				navigate("/home");
 			})
 			.catch(function (error) {
 				setError(error.response.data.detail);
@@ -44,7 +42,10 @@ function Login() {
 				</div>
 				<form
 					className="flex flex-col items-center w-1/2 justify-center p-4 gap-8"
-					onSubmit={onSubmit}
+					onSubmit={(e) => {
+						e.preventDefault();
+						onSubmit();
+					}}
 				>
 					<h1 className="text-3xl">Admin</h1>
 					<input

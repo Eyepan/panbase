@@ -56,8 +56,8 @@ async def get_collection(collection_name: str, token: str = Depends(oauth2_schem
     if get_token_owner_type(token) == "USER":
         raise HTTPException(
             status_code=403, detail="A user isn't allowed to access this endpoint")
-    contents = db.run_query(f"SELECT * FROM {collection_name}")
-    columns = db.run_query(f"PRAGMA table_info({collection_name})")
+    contents = db.run_query(f"SELECT * FROM '{collection_name}'")
+    columns = db.run_query(f"PRAGMA table_info('{collection_name}')")
     columns = [dict(zip(Column, column)) for column in columns]
     contents = [dict(zip([column['name'] for column in columns], content))
                 for content in contents]
@@ -72,4 +72,4 @@ async def create_new_collection(content: NewCollection, token: str = Depends(oau
     columns_str = ", ".join(
         [f"{column.name} {column.type} {'NOT NULL' if column.notnull else ''} {'DEFAULT ' + column.dflt_value if column.dflt_value else ''} {'PRIMARY KEY' if column.pk else ''}" for column in content.columns])
     db.run_query(
-        f"CREATE TABLE {content.collection_name} (id INTEGER PRIMARY KEY AUTOINCREMENT, {columns_str})")
+        f"CREATE TABLE '{content.collection_name}' (id TEXT PRIMARY KEY {',' if columns_str else ''}  {columns_str})")

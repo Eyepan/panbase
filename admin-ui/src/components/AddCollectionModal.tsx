@@ -7,9 +7,10 @@ function AddCollectionModal(props: { onClose: any }) {
 	const { onClose } = props;
 	const [collectionName, setCollectionName] = useState("");
 	const [columns, setColumns] = useState<Column[]>([]);
+	const [error, setError] = useState("");
 	const apiUrl = import.meta.env.VITE_API_URL;
-	async function handleAddCollection(e: { preventDefault: () => void }) {
-		e.preventDefault();
+
+	async function handleAddCollection() {
 		const payloadData = {
 			collection_name: collectionName,
 			columns: columns,
@@ -17,12 +18,12 @@ function AddCollectionModal(props: { onClose: any }) {
 		await axios
 			.post(apiUrl + "api/collections", payloadData, getAuthHeaders())
 			.then((response) => {
-				console.log(response);
+				setError("");
+				onClose();
 			})
 			.catch((error) => {
-				console.log(error);
+				setError(error.response.data.detail);
 			});
-		onClose();
 	}
 
 	function handleColumnChange(
@@ -53,7 +54,10 @@ function AddCollectionModal(props: { onClose: any }) {
 		<div className="w-screen h-screen absolute flex items-center justify-center top-0 left-0 bg-black bg-opacity-50 z-30">
 			<div className="md:w-1/2 lg:w-1/3 bg-white z-50 ">
 				<form
-					onSubmit={handleAddCollection}
+					onSubmit={(e) => {
+						e.preventDefault();
+						handleAddCollection();
+					}}
 					action=""
 					className="flex flex-col justify-center h-full p-4 gap-2"
 				>
@@ -117,6 +121,8 @@ function AddCollectionModal(props: { onClose: any }) {
 						System Fields: <code>id</code> of type{" "}
 						<code>INTEGER AUTOINCREMENT</code>
 					</span>
+					{error && <div className="text-red-500">{error}</div>}
+
 					<div className="flex gap-2">
 						<button
 							type="reset"

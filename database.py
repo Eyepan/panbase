@@ -1,5 +1,6 @@
 import os
 import sqlite3
+import uuid
 import bcrypt
 from fastapi import HTTPException
 
@@ -26,7 +27,8 @@ class Database:
             result = cursor.fetchall()
             return result
         except Exception as e:
-            raise HTTPException(status_code=400, detail=str(e))
+            raise HTTPException(status_code=400, detail=str(
+                e).replace("table", "collection").capitalize())
         finally:
             cursor.close()
             conn.close()
@@ -39,9 +41,9 @@ class Database:
 
     def __init__(self):
         self.run_query(
-            "CREATE TABLE IF NOT EXISTS admins (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE, password TEXT)")
+            "CREATE TABLE IF NOT EXISTS admins (id TEXT PRIMARY KEY, username TEXT UNIQUE, password TEXT)")
         self.run_query(
-            "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE, password TEXT)")
+            "CREATE TABLE IF NOT EXISTS users (id TEXT PRIMARY KEY, username TEXT UNIQUE, password TEXT)")
         self.run_query("CREATE TABLE IF NOT EXISTS salt (salt TEXT)")
         result = self.run_query("SELECT * FROM salt")
         if result == []:
@@ -51,8 +53,8 @@ class Database:
         else:
             self.salt_value = result[0][0]
         if self.run_query("SELECT * FROM admins") == []:
-            self.run_query("INSERT INTO admins (username, password) VALUES (:username, :password)",
-                           username="admin", password=self.encrypt("admin"))
+            self.run_query("INSERT INTO admins (id, username, password) VALUES (:id, :username, :password)",
+                           id=str(uuid.uuid4()), username="admin", password=self.encrypt("admin"))
 
 
 db = Database()

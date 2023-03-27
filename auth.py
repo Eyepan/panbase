@@ -8,13 +8,16 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 def get_token_owner_type(token):
-    input = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
-    result = db.run_query(
-        f"SELECT * FROM admins WHERE id = :id", id=input['id'])
-    if result:
-        return "ADMIN"
-    result = db.run_query(
-        f"SELECT * FROM users WHERE id = :id", id=input['id'])
-    if result:
-        return "USER"
+    try:
+        input = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
+        result = db.run_query(
+            f"SELECT * FROM admins WHERE id = :id", id=input['id'])
+        if result:
+            return "ADMIN"
+        result = db.run_query(
+            f"SELECT * FROM users WHERE id = :id", id=input['id'])
+        if result:
+            return "USER"
+    except jwt.exceptions.DecodeError:
+        raise HTTPException(status_code=400, detail="Invalid token")
     raise HTTPException(status_code=400, detail="Invalid token")

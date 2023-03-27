@@ -25,27 +25,15 @@ function Home() {
 		navigate(0);
 	}
 
-	async function verifyToken() {
-		try {
-			const response = await axios.get(
-				apiUrl + "verify",
-				getAuthHeaders()
-			);
-			if (!response) {
-				navigate("/login");
-			}
-		} catch (error) {
-			console.log(error);
-		}
-	}
 	async function getCollections() {
-		try {
-			const response = await axios.get(
-				apiUrl + "api/collections/all",
-				getAuthHeaders()
-			);
-			setCollections(response.data);
-		} catch (error) {}
+		await axios
+			.get(apiUrl + "api/collections/all", getAuthHeaders())
+			.then((response) => {
+				setCollections(response.data);
+			})
+			.catch((error) => {
+				navigate("/login");
+			});
 	}
 
 	async function getCurrentCollectionData() {
@@ -64,9 +52,9 @@ function Home() {
 				});
 		}
 	}
+
 	// on init
 	useEffect(() => {
-		verifyToken();
 		getCollections();
 		setCurrentCollection(collections[0]);
 	}, []);
