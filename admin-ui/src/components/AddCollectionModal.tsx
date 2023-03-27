@@ -102,6 +102,7 @@ function AddCollectionModal(props: { onClose: any }) {
 								<option value="NUMERIC">NUMERIC</option>
 								<option value="REAL">REAL</option>
 								<option value="BLOB">BLOB</option>
+								<option value="DATETIME">DATETIME</option>
 							</select>
 						</div>
 					))}
