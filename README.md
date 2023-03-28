@@ -24,10 +24,15 @@ pip install -r requirements.txt
 -   Create a `config.py` file with the following contents:
 
 ```python
-JWT_SECRET = "your_jwt_secret"
-UVICORN_PORT = 8000
+import sys
+
+
+LOG_LEVEL = "DEBUG" if '--debug' in sys.argv else "CRITICAL"
+API_PORT = 8000
 ADMIN_PORT = 9000
-LOG_LEVEL = "DEBUG"
+RELOAD = True if '--reload' in sys.argv else False
+JWT_SECRET = "supersecretjwtsecret"
+
 
 ```
 
@@ -73,10 +78,13 @@ pip install -r requirements.txt
 -   Create a `config.py` file with the following contents:
 
 ```python
-JWT_SECRET = "your_jwt_secret"
-UVICORN_PORT = 8000
+import sys
+
+LOG_LEVEL = "DEBUG" if '--debug' in sys.argv else "CRITICAL"
+API_PORT = 8000
 ADMIN_PORT = 9000
-LOG_LEVEL = "DEBUG"
+RELOAD = True if '--reload' in sys.argv else False
+JWT_SECRET = "super_secret_jwt_secret"
 
 ```
 
@@ -106,4 +114,4 @@ NOTE: `--debug` can also be swapped out for `--verbose`:
 |Flag|Meaning|
 |-|-|
 |`--debug`/ `-d`| Shows debugging information. Sets `log_level` to DEBUG. Also shows the SQL Queries that are actually run|
-|`--verbose`|Sets `log_level` to INFO. Does not show SQL Queries.|
+|| |
