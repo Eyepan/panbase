@@ -53,7 +53,9 @@ npm run build
 
 ```powershell
 cd ..
-nuitka main.py --output-dir=dist --onefile --standalone -o panbase.exe --quiet --remove-output --show-progress   --include-data-file=database.db=database.db --include-data-dir=ui/dist=ui/dist --onefile-tempdir-spec="%TEMP%\panbase\0.1.0"
+del database.db
+python main.py --debug --init
+python -m nuitka main.py --output-dir=dist --onefile --standalone -o panbase.exe --quiet --remove-output --show-progress --include-data-file=database.db=database.db --include-data-dir=admin-ui/dist=admin-ui/dist --onefile-tempdir-spec="%TEMP%\panbase\0.1.0"
 ```
 
 The `--onefile-tempdir` flag is enabled in `Nuitka` to not create a new temp directory everytime the built executable runs. This will throw an warning saying
