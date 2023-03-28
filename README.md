@@ -49,14 +49,14 @@ npm install
 npm run build
 ```
 
--   Go back and run the build command with Nuitka:
+-   Go back and run the build command with `nuitka`:
 
 ```powershell
 cd ..
 nuitka main.py --output-dir=dist --onefile --standalone -o panbase.exe --quiet --remove-output --show-progress   --include-data-file=database.db=database.db --include-data-dir=ui/dist=ui/dist --onefile-tempdir-spec="%TEMP%\panbase\0.1.0"
 ```
 
-The `--onefile-tempdir` flag is enabled in Nuitka to not create a new temp directory everytime the built executable runs. This will throw an warning saying
+The `--onefile-tempdir` flag is enabled in `Nuitka` to not create a new temp directory everytime the built executable runs. This will throw an warning saying
 
 ```diff
 -Not using any variables for '--onefile-tempdir-spec' should only be done if your program absolutely needs to be in the same path always
@@ -114,4 +114,4 @@ NOTE: `--debug` can also be swapped out for `--verbose`:
 |Flag|Meaning|
 |-|-|
 |`--debug`/ `-d`| Shows debugging information. Sets `log_level` to DEBUG. Also shows the SQL Queries that are actually run|
-|| |
+|`--init`| Just initializes the database.db file. Used during building with `Nuitka` |
