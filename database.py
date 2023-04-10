@@ -25,13 +25,12 @@ class Database:
             cursor.execute(query, kwargs)
             conn.commit()
             result = cursor.fetchall()
+            cursor.close()
+            conn.close()
             return result
         except Exception as e:
             raise HTTPException(status_code=400, detail=str(
                 e).replace("table", "collection").capitalize())
-        finally:
-            cursor.close()
-            conn.close()
 
     def encrypt(self, password):
         return bcrypt.hashpw(password.encode(), self.salt_value)
